@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Trillizos Detectives y el Misterio de la Naturaleza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0b132b;
+            color: #ffffff;
+            min-height: 100vh;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-fun {
+            font-family: 'Fredoka', cursive;
+        }
+
+        /* GLOW & NEON EFFECTS */
+        .neon-glow-cyan {
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.6), inset 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .neon-glow-amber {
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.7), inset 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        /* HOTSPOTS FLOTANTES EN LA IMAGEN */
+        .hotspot {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 30;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hotspot:hover {
+            transform: translate(-50%, -50%) scale(1.25);
+        }
+
+        /* SPEECH BUBBLE DETECTIVES */
+        .detective-speech {
+            position: relative;
+            background: rgba(15, 23, 42, 0.95);
+            border: 3px solid #38bdf8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(56, 189, 248, 0.3);
+            border-radius: 20px;
+        }
+
+        /* BOTONES CON EFECTO TÁCTIL Y SOMBRA 3D */
+        .btn-detective {
+            transition: all 0.15s ease;
+            box-shadow: 0 6px 0 var(--tw-shadow-color, #0284c7), 0 10px 15px rgba(0,0,0,0.5);
+        }
+        .btn-detective:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 var(--tw-shadow-color, #0284c7), 0 4px 6px rgba(0,0,0,0.5);
+        }
+
+        /* ANIMACIÓN DE HUELLAS CIAN FLOTANTES */
+        @keyframes footprint-pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); filter: drop-shadow(0 0 5px #06b6d4); }
+            50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 15px #22d3ee); }
+        }
+        .animate-footprint {
+            animation: footprint-pulse 2s infinite ease-in-out;
+        }
+
+        /* TRANSICIONES DE ESCENARIO */
+        .fade-enter {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-start min-h-screen p-2 md:p-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-indigo-950 to-slate-950">
+
+    <!-- SHOWCASE & DEMO PREVIEW BAR -->
+    <nav class="w-full max-w-6xl mb-3 bg-slate-900/90 border-2 border-cyan-500/50 rounded-2xl p-2.5 flex flex-wrap justify-between items-center gap-2 z-50 text-xs md:text-sm backdrop-blur-md">
+        <div class="flex items-center gap-2 font-fun text-cyan-300 font-bold">
+            <span class="text-xl">🕵️‍♂️</span>
+            <span>VISTA PREVIA DEL JUEGO:</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 font-bold">
+            <button onclick="previewScreen('intro')" class="px-2.5 py-1 bg-cyan-950 hover:bg-cyan-800 border border-cyan-400/50 rounded-lg text-cyan-200 transition">1. Inicio & Diálogo</button>
+            <button onclick="previewScreen('map')" class="px-2.5 py-1 bg-amber-950 hover:bg-amber-800 border border-amber-400/50 rounded-lg text-amber-200 transition">2. Escena Interactiva</button>
+            <button onclick="previewScreen('challenge')" class="px-2.5 py-1 bg-purple-950 hover:bg-purple-800 border border-purple-400/50 rounded-lg text-purple-200 transition">3. Desafío Científico</button>
+            <button onclick="previewScreen('lab')" class="px-2.5 py-1 bg-emerald-950 hover:bg-emerald-800 border border-emerald-400/50 rounded-lg text-emerald-200 transition">4. Examen con Linterna</button>
+            <button onclick="previewScreen('victory')" class="px-2.5 py-1 bg-yellow-950 hover:bg-yellow-800 border border-yellow-400/50 rounded-lg text-yellow-200 transition">5. Diploma Final</button>
+        </div>
+    </nav>
+
+    <!-- CONTAINER PRINCIPAL DEL JUEGO -->
+    <div id="game-card" class="w-full max-w-6xl bg-slate-900/80 border-4 border-cyan-500/60 rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.25)] flex flex-col overflow-hidden relative backdrop-blur-xl">
+
+        <!-- HEADER DEL JUEGO -->
+        <header id="main-header" class="bg-gradient-to-r from-cyan-950 via-slate-900 to-purple-950 p-3 border-b-2 border-cyan-500/40 flex justify-between items-center z-40">
+            <div class="flex items-center gap-3">
+                <button id="btn-sound" onclick="toggleAudio()" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl border border-cyan-400/40 text-xl" title="Sonido">
+                    🔊
+                </button>
+                <div class="flex items-center bg-slate-950/80 px-3 py-1 rounded-xl border border-rose-500/60">
+                    <span class="text-xl mr-1">🔍</span>
+                    <span id="lives-display" class="font-bold text-rose-300 font-fun">3</span>
+                </div>
+            </div>
+
+            <!-- TÍTULO DE LA PANTALLA -->
+            <div class="text-center hidden sm:block">
+                <span id="case-title" class="font-fun text-amber-300 font-bold text-sm md:text-base uppercase tracking-wider block">
+                    EL MISTERIO EN EL MUSEO NOCTURNO
+                </span>
+                <span id="detective-step" class="text-xs text-cyan-300 font-semibold">Paso 1: Exploración con la imagen</span>
+            </div>
+
+            <!-- PUNTAJE Y INSIGNIAS -->
+            <div class="flex items-center gap-2">
+                <div class="flex items-center bg-slate-950/80 px-3 py-1 rounded-xl border border-amber-400/60">
+                    <span class="text-xl mr-1">📜</span>
+                    <span id="score-display" class="font-bold text-amber-300 font-fun">0 pts</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN DISPLAY (IMAGEN INTERACTIVA O DESAFÍOS) -->
+        <main id="game-stage" class="relative w-full min-h-[580px] flex flex-col justify-center items-center overflow-hidden p-2 md:p-4">
+            <!-- Inyectado dinámicamente -->
+        </main>
+
+        <!-- FOOTER BAR (INTERACCIÓN Y MENSAJES) -->
+        <footer id="main-footer" class="bg-slate-950/90 p-3 border-t-2 border-cyan-500/40 flex flex-col sm:flex-row justify-between items-center gap-3 z-40">
+            <div id="footer-text" class="text-xs md:text-sm font-semibold text-cyan-200 text-center sm:text-left flex items-center gap-2">
+                <span>🔦 Haz clic en los objetos o personajes de la imagen para iniciar la investigación.</span>
+            </div>
+            <button id="btn-action-next" onclick="handleNextAction()" class="btn-detective bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-fun font-bold px-6 py-2 rounded-xl text-base shadow-amber-800 uppercase hidden">
+                Continuar ➔
+            </button>
+        </footer>
+    </div>
+
+    <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- EFECTOS DE SONIDO WEB AUDIO API -->
+    <script>
+        class DetectiveAudioSystem {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            playFlashlight() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
+            playCorrect() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const st = now + i * 0.08;
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(f, st);
+                    gain.gain.setValueAtTime(0.2, st);
+                    gain.gain.exponentialRampToValueAtTime(0.01, st + 0.2);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(st);
+                    osc.stop(st + 0.2);
+                });
+            }
+            playWrong() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+        const audioSys = new DetectiveAudioSystem();
+        function toggleAudio() {
+            audioSys.muted = !audioSys.muted;
+            document.getElementById('btn-sound').innerText = audioSys.muted ? '🔇' : '🔊';
+        }
+    </script>
+
+    <!-- FUEGOS ARTIFICIALES / CONFETI -->
+    <script>
+        const canvas = document.getElementById('fx-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function launchFX() {
+            const colors = ['#38bdf8', '#facc15', '#a855f7', '#4ade80', '#f43f5e'];
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 16,
+                    vy: (Math.random() - 0.5) * 16,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 8 + 3,
+                    alpha: 1
+                });
+            }
+            animFX();
+            audioSys.playCorrect();
+        }
+
+        function animFX() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.02;
+                if (p.alpha <= 0) {
+                    particles.splice(index, 1);
+                } else {
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+            if (particles.length > 0) requestAnimationFrame(animFX);
+        }
+    </script>
+
+    <!-- LÓGICA DEL JUEGO CON LA IMAGEN EXACTA DEL USUARIO -->
+    <script>
+        // URL DE LA IMAGEN SUMINISTRADA EXACTAMENTE POR EL USUARIO
+        const USER_EXACT_IMAGE = "Imagen generada con Canva IA 22 oct 2026, 9_23_08.png";
+
+        // DATOS DE LOS 3 PERSONAJES DETECTIVES DE LA FOTO
+        const DETECTIVES = {
+            greenBoy: {
+                name: "Lucas (Detective de Verde)",
+                role: "Especialista en Lupa y Fósiles",
+                desc: "Usa su lupa para inspeccionar pequeños detalles de la naturaleza y huellas.",
+                color: "#22c55e",
+                avatarHtml: `<div class="w-12 h-12 rounded-full border-2 border-green-400 bg-emerald-950 flex items-center justify-center text-2xl">🧥</div>`
+            },
+            redGirl: {
+                name: "Valeria (Detective Pelirroja)",
+                role: "Cartógrafa y Botánica",
+                desc: "Analiza el mapa antiguo de la selva y descifra la fotosíntesis y plantas.",
+                color: "#f97316",
+                avatarHtml: `<div class="w-12 h-12 rounded-full border-2 border-amber-400 bg-amber-950 flex items-center justify-center text-2xl">🕵️‍♀️</div>`
+            },
+            purpleBoy: {
+                name: "Mateo (Detective de Morado)",
+                role: "Explorador con Linterna",
+                desc: "Ilumina las zonas oscuras y estudia la física de la luz y la cadena trófica.",
+                color: "#a855f7",
+                avatarHtml: `<div class="w-12 h-12 rounded-full border-2 border-purple-400 bg-purple-950 flex items-center justify-center text-2xl">🔦</div>`
+            }
+        };
+
+        // ESTADO GENERAL
+        let gameState = {
+            score: 0,
+            lives: 3,
+            currentStep: 0,
+            currentQuestion: 0,
+            dialogueIndex: 0,
+            flashlightExamSelected: []
+        };
+
+        // PREGUNTAS DE CIENCIAS NATURALES CON LOS PERSONAJES
+        const QUESTS = [
+            {
+                id: 1,
+                character: DETECTIVES.greenBoy,
+                title: "Desafío 1: El Misterio de las Huellas y Fósiles",
+                question: "Lucas usó su lupa en las huellas luminosas cian del suelo. ¿Qué información científica nos revela la forma y tamaño de la pisada de un animal extinto o fósil?",
+                options: [
+                    { text: "El tamaño del animal, su tipo de desplazamiento y su masa aproximada.", correct: true },
+                    { text: "El color exacto de sus ojos y la música que le gustaba escuchar.", correct: false },
+                    { text: "Únicamente si el animal sabía nadar bajo el agua en la noche.", correct: false }
+                ],
+                explanation: "¡Correcto! Los icnofósiles (huellas fósiles) permiten a los paleontólogos deducir el peso, velocidad y postura de los animales ancestrales."
+            },
+            {
+                id: 2,
+                character: DETECTIVES.purpleBoy,
+                title: "Desafío 2: La Luz de la Linterna y la Fotosíntesis",
+                question: "Mateo ilumina el mapa con su linterna. Si esa luz simula la energía solar que reciben las hojas de los árboles en la selva, ¿qué sustancia producen las plantas gracias a la luz?",
+                options: [
+                    { text: "Glucosa (alimento) y Oxígeno para los seres vivos.", correct: true },
+                    { text: "Petróleo y Rocas volcánicas.", correct: false },
+                    { text: "Gasolina y Luz eléctrica artificial.", correct: false }
+                ],
+                explanation: "¡Excelente! Las plantas son productores primarios que transforman la luz solar, agua y CO2 en oxígeno y carbohidratos."
+            },
+            {
+                id: 3,
+                character: DETECTIVES.redGirl,
+                title: "Desafío 3: El Mapa de la Cadena Alimentaria",
+                question: "Valeria señala en el mapa un búho, una estatua de serpiente y plantas. En una cadena trófica natural, ¿cuál es el orden correcto del flujo de energía?",
+                options: [
+                    { text: "Planta (Productor) ➔ Insecto (Consumidor 1º) ➔ Búho (Consumidor 2º)", correct: true },
+                    { text: "Búho ➔ Planta ➔ Sol ➔ Agua", correct: false },
+                    { text: "Insecto ➔ Planta ➔ Roca de la estatua", correct: false }
+                ],
+                explanation: "¡Gran deducción! La energía fluye desde los productores fotosintéticos hacia los herbívoros y luego a los carnívoros."
+            }
+        ];
+
+        // DIÁLOGOS INICIALES CON LA FOTO
+        const INTRO_DIALOGUES = [
+            {
+                speaker: DETECTIVES.purpleBoy,
+                text: "¡Miren esto chicos! Con mi linterna encontré un mapa antiguo en el suelo del museo nocturno..."
+            },
+            {
+                speaker: DETECTIVES.redGirl,
+                text: "¡Es el mapa secreto de Ciencias Naturales! Muestra la ruta de la fotosíntesis y los ecosistemas de la selva."
+            },
+            {
+                speaker: DETECTIVES.greenBoy,
+                text: "¡Y miren con mi lupa! Hay huellas fósiles cian en el piso. ¡Si respondemos las preguntas científicas, el baúl del tesoro se abrirá!"
+            }
+        ];
+
+        function updateHeaderUI() {
+            document.getElementById('lives-display').innerText = gameState.lives;
+            document.getElementById('score-display').innerText = `${gameState.score} pts`;
+        }
+
+        function showStageHTML(html) {
+            document.getElementById('game-stage').innerHTML = html;
+        }
+
+        // PANTALLA 1: ESCENA PRINCIPAL CON LA FOTO Y HOTSPOTS
+        function renderMainImageScene() {
+            document.getElementById('case-title').innerText = "EL MISTERIO EN EL MUSEO NOCTURNO";
+            document.getElementById('detective-step').innerText = "Explora la imagen interactiva con los 3 detectives";
+
+            const html = `
+                <div class="relative w-full max-w-4xl rounded-2xl overflow-hidden border-4 border-cyan-400/80 shadow-[0_0_40px_rgba(6,182,212,0.4)] fade-enter">
+                    
+                    <!-- IMAGEN EXACTA DEL USUARIO -->
+                    <img src="${USER_EXACT_IMAGE}" alt="Detectives en Museo Nocturno" class="w-full h-auto object-cover block">
+
+                    <!-- HOTSPOT 1: NIÑO VERDE / LUPA -->
+                    <div class="hotspot" style="top: 55%; left: 25%;" onclick="triggerHotspot('green')" title="Lucas (Detective de Verde)">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-green-500/90 border-2 border-white rounded-full flex items-center justify-center text-xl md:text-2xl shadow-lg animate-bounce">
+                            🔍
+                        </div>
+                    </div>
+
+                    <!-- HOTSPOT 2: NIÑA PELIRROJA / MAPA -->
+                    <div class="hotspot" style="top: 60%; left: 45%;" onclick="triggerHotspot('red')" title="Valeria (Mapa de la Selva)">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-amber-500/90 border-2 border-white rounded-full flex items-center justify-center text-xl md:text-2xl shadow-lg animate-pulse">
+                            🗺️
+                        </div>
+                    </div>
+
+                    <!-- HOTSPOT 3: NIÑO MORADO / LINTERNA -->
+                    <div class="hotspot" style="top: 55%; left: 68%;" onclick="triggerHotspot('purple')" title="Mateo (Detective con Linterna)">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-purple-500/90 border-2 border-white rounded-full flex items-center justify-center text-xl md:text-2xl shadow-lg animate-bounce">
+                            🔦
+                        </div>
+                    </div>
+
+                    <!-- HOTSPOT 4: HUELLAS LUMINOSAS CIAN -->
+                    <div class="hotspot" style="top: 78%; left: 22%;" onclick="triggerHotspot('footprints')" title="Huellas Fósiles">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-cyan-400/90 border-2 border-white rounded-full flex items-center justify-center text-xl md:text-2xl shadow-lg animate-footprint">
+                            🐾
+                        </div>
+                    </div>
+
+                    <!-- OVERLAY DIÁLOGO FLOTANTE -->
+                    <div id="dialogue-box" class="absolute bottom-4 left-4 right-4 detective-speech p-4 text-white z-40 flex items-center gap-3">
+                        <div id="dialogue-avatar" class="flex-shrink-0">
+                            ${INTRO_DIALOGUES[gameState.dialogueIndex].speaker.avatarHtml}
+                        </div>
+                        <div class="flex-1">
+                            <span id="dialogue-name" class="font-fun font-bold text-cyan-300 text-sm block">
+                                ${INTRO_DIALOGUES[gameState.dialogueIndex].speaker.name}
+                            </span>
+                            <p id="dialogue-text" class="text-xs md:text-sm text-slate-100 font-medium">
+                                "${INTRO_DIALOGUES[gameState.dialogueIndex].text}"
+                            </p>
+                        </div>
+                        <button onclick="nextDialogue()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-fun font-bold px-4 py-2 rounded-xl text-xs uppercase shadow-md flex-shrink-0">
+                            Siguiente ➔
+                        </button>
+                    </div>
+
+                </div>
+            `;
+            showStageHTML(html);
+            document.getElementById('footer-text').innerHTML = "<span>💬 Los 3 detectives están conversando. Pulsa 'Siguiente' en el cuadro de diálogo para avanzar.</span>";
+        }
+
+        function nextDialogue() {
+            audioSys.playFlashlight();
+            gameState.dialogueIndex++;
+            if (gameState.dialogueIndex < INTRO_DIALOGUES.length) {
+                const d = INTRO_DIALOGUES[gameState.dialogueIndex];
+                document.getElementById('dialogue-avatar').innerHTML = d.speaker.avatarHtml;
+                document.getElementById('dialogue-name').innerText = d.speaker.name;
+                document.getElementById('dialogue-text').innerText = `"${d.text}"`;
+            } else {
+                // Terminan diálogos iniciales -> ir al mapa de desafíos
+                document.getElementById('dialogue-box').innerHTML = `
+                    <div class="flex items-center justify-between w-full">
+                        <span class="text-sm font-fun text-amber-300 font-bold">¡Excelente! Ahora haz clic en cualquier elemento brillante de la foto para comenzar los Desafíos.</span>
+                        <button onclick="startChallenge(0)" class="btn-detective bg-amber-400 text-slate-950 font-fun font-bold px-4 py-2 rounded-xl text-xs uppercase">
+                            ¡Comenzar Desafío 1! ➔
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function triggerHotspot(type) {
+            audioSys.playFlashlight();
+            if (type === 'green') startChallenge(0);
+            else if (type === 'purple') startChallenge(1);
+            else if (type === 'red') startChallenge(2);
+            else if (type === 'footprints') startChallenge(0);
+        }
+
+        // PANTALLA 2: PREGUNTAS Y DESAFÍOS CIENTÍFICOS
+        function startChallenge(index) {
+            gameState.currentQuestion = index;
+            const q = QUESTS[index];
+
+            document.getElementById('case-title').innerText = q.title;
+            document.getElementById('detective-step').innerText = `Paso ${index + 1} de 3`;
+
+            const html = `
+                <div class="w-full max-w-3xl bg-slate-900/90 border-2 border-cyan-400 rounded-3xl p-5 md:p-8 flex flex-col gap-6 fade-enter shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+                    
+                    <!-- ENCABEZADO CON EL PERSONAJE DE LA FOTO QUE DA LA PISTA -->
+                    <div class="flex items-center gap-4 bg-slate-950 p-4 rounded-2xl border border-cyan-500/40">
+                        ${q.character.avatarHtml}
+                        <div>
+                            <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest font-fun block">Pista proporcionada por:</span>
+                            <h3 class="text-lg md:text-xl font-bold font-fun text-amber-300">${q.character.name}</h3>
+                            <p class="text-xs text-slate-300">${q.character.desc}</p>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTA -->
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold font-fun text-white mb-2 leading-relaxed">
+                            ${q.question}
+                        </h2>
+                    </div>
+
+                    <!-- OPCIONES -->
+                    <div class="flex flex-col gap-3">
+                        ${q.options.map((opt, i) => `
+                            <button id="opt-btn-${i}" onclick="checkAnswer(${i})" class="btn-detective text-left p-4 rounded-2xl bg-slate-800 hover:bg-slate-700 border-2 border-cyan-500/50 text-white font-semibold text-sm md:text-base flex items-center justify-between">
+                                <span>${opt.text}</span>
+                                <span class="text-lg">🔎</span>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                </div>
+            `;
+            showStageHTML(html);
+            document.getElementById('footer-text').innerText = " Selecciona la respuesta correcta para avanzar por el mapa nocturno.";
+        }
+
+        function checkAnswer(selectedIndex) {
+            const q = QUESTS[gameState.currentQuestion];
+            const isCorrect = q.options[selectedIndex].correct;
+
+            q.options.forEach((_, i) => {
+                const btn = document.getElementById(`opt-btn-${i}`);
+                btn.onclick = null;
+                if (i === selectedIndex) {
+                    if (isCorrect) {
+                        btn.className = "btn-detective text-left p-4 rounded-2xl bg-emerald-600 border-2 border-white text-white font-bold text-sm md:text-base flex items-center justify-between shadow-emerald-900";
+                    } else {
+                        btn.className = "btn-detective text-left p-4 rounded-2xl bg-rose-600 border-2 border-white text-white font-bold text-sm md:text-base flex items-center justify-between shadow-rose-900";
+                    }
+                }
+            });
+
+            if (isCorrect) {
+                launchFX();
+                gameState.score += 300;
+                updateHeaderUI();
+                document.getElementById('footer-text').innerHTML = `<span class="text-emerald-400 font-bold">¡CORRECTO! +300 pts. ${q.explanation}</span>`;
+            } else {
+                audioSys.playWrong();
+                gameState.lives--;
+                updateHeaderUI();
+                document.getElementById('footer-text').innerHTML = `<span class="text-rose-400 font-bold">¡PISTA INCORRECTA! Se restó 1 lupa de vida.</span>`;
+            }
+
+            const btnNext = document.getElementById('btn-action-next');
+            btnNext.classList.remove('hidden');
+            btnNext.onclick = () => {
+                btnNext.classList.add('hidden');
+                if (gameState.lives <= 0) {
+                    renderGameOver();
+                } else if (gameState.currentQuestion + 1 < QUESTS.length) {
+                    startChallenge(gameState.currentQuestion + 1);
+                } else {
+                    renderFlashlightExamScreen();
+                }
+            };
+        }
+
+        // PANTALLA 3: EXAMEN CIENTÍFICO CON LA LINTERNA EN VIVO
+        function renderFlashlightExamScreen() {
+            document.getElementById('case-title').innerText = "EXAMEN DE LINTERNA CIENTÍFICA";
+            document.getElementById('detective-step').innerText = "Paso Final: Ilumina los elementos fotosintéticos";
+
+            gameState.flashlightExamSelected = [];
+
+            const html = `
+                <div class="w-full max-w-3xl bg-slate-900/90 border-2 border-purple-500 rounded-3xl p-6 flex flex-col items-center text-center fade-enter">
+                    
+                    <div class="w-16 h-16 rounded-full bg-purple-950 border-2 border-purple-400 flex items-center justify-center text-3xl mb-3">
+                        🔦
+                    </div>
+
+                    <h2 class="text-2xl font-bold font-fun text-amber-300 mb-2">
+                        Examen de Mateo: Ilumina con tu linterna los 2 componentes esenciales que necesitan las plantas para vivir
+                    </h2>
+                    <p class="text-xs text-slate-300 mb-6">Haz clic sobre las tarjetas para iluminarlas con la linterna:</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mb-6">
+                        <div id="card-0" onclick="toggleExamCard(0)" class="btn-detective bg-slate-800 border-2 border-cyan-500/40 p-5 rounded-2xl cursor-pointer flex flex-col items-center">
+                            <span class="text-3xl mb-2">☀️</span>
+                            <span class="font-bold text-sm font-fun">Luz Solar</span>
+                        </div>
+                        <div id="card-1" onclick="toggleExamCard(1)" class="btn-detective bg-slate-800 border-2 border-cyan-500/40 p-5 rounded-2xl cursor-pointer flex flex-col items-center">
+                            <span class="text-3xl mb-2">💧</span>
+                            <span class="font-bold text-sm font-fun">Agua (H2O)</span>
+                        </div>
+                        <div id="card-2" onclick="toggleExamCard(2)" class="btn-detective bg-slate-800 border-2 border-cyan-500/40 p-5 rounded-2xl cursor-pointer flex flex-col items-center">
+                            <span class="text-3xl mb-2">🍕</span>
+                            <span class="font-bold text-sm font-fun">Pizza Chatarra</span>
+                        </div>
+                    </div>
+
+                    <button onclick="checkExamAnswer()" class="btn-detective bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-fun font-bold px-8 py-3 rounded-2xl text-lg uppercase shadow-amber-800">
+                        ¡Comprobar con la Linterna! 🔦
+                    </button>
+                </div>
+            `;
+            showStageHTML(html);
+        }
+
+        function toggleExamCard(idx) {
+            audioSys.playFlashlight();
+            const card = document.getElementById(`card-${idx}`);
+            const pos = gameState.flashlightExamSelected.indexOf(idx);
+
+            if (pos > -1) {
+                gameState.flashlightExamSelected.splice(pos, 1);
+                card.className = "btn-detective bg-slate-800 border-2 border-cyan-500/40 p-5 rounded-2xl cursor-pointer flex flex-col items-center";
+            } else {
+                if (gameState.flashlightExamSelected.length >= 2) return;
+                gameState.flashlightExamSelected.push(idx);
+                card.className = "btn-detective bg-amber-400 text-slate-950 border-2 border-white p-5 rounded-2xl cursor-pointer flex flex-col items-center font-bold scale-105";
+            }
+        }
+
+        function checkExamAnswer() {
+            if (gameState.flashlightExamSelected.length < 2) {
+                alert("¡Ilumina 2 elementos con la linterna primero!");
+                return;
+            }
+
+            const isCorrect = gameState.flashlightExamSelected.includes(0) && gameState.flashlightExamSelected.includes(1);
+
+            if (isCorrect) {
+                launchFX();
+                gameState.score += 400;
+                updateHeaderUI();
+                renderVictoryScreen();
+            } else {
+                audioSys.playWrong();
+                gameState.lives--;
+                updateHeaderUI();
+                if (gameState.lives <= 0) renderGameOver();
+                else alert("Pista errónea. La pizza no alimenta fotosintéticamente a las plantas. Intenta de nuevo.");
+            }
+        }
+
+        // PANTALLA DE VICTORIA CON CERTIFICADO
+        function renderVictoryScreen() {
+            launchFX();
+            document.getElementById('case-title').innerText = "¡MISTERIO MUNICIPAL RESUELTO!";
+            document.getElementById('detective-step').innerText = "Diploma de Detective Científico";
+
+            const html = `
+                <div class="w-full max-w-2xl bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-4 border-amber-400 rounded-3xl p-6 text-center flex flex-col items-center fade-enter shadow-[0_0_60px_rgba(245,158,11,0.4)]">
+                    
+                    <span class="bg-amber-400 text-slate-950 font-black px-4 py-1 rounded-full text-xs uppercase tracking-widest font-fun mb-2">
+                        🏆 MÁXIMO LOGRO DETECTIVE
+                    </span>
+
+                    <h1 class="text-3xl md:text-5xl font-black font-fun text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 mb-2">
+                        ¡FELICIDADES DETECTIVE!
+                    </h1>
+                    <p class="text-xs md:text-sm text-cyan-200 mb-6">
+                        Junto a Lucas, Valeria y Mateo descifraste los enigmas de las huellas, la fotosíntesis y el mapa nocturno.
+                    </p>
+
+                    <div class="w-full bg-slate-950/80 border-2 border-cyan-400/50 rounded-2xl p-4 mb-6 flex justify-around items-center">
+                        <div>
+                            <span class="text-xs text-cyan-400 font-bold uppercase block">Puntuación Final</span>
+                            <span class="text-3xl font-black font-fun text-amber-300">${gameState.score} pts</span>
+                        </div>
+                        <div class="h-10 w-0.5 bg-slate-800"></div>
+                        <div>
+                            <span class="text-xs text-cyan-400 font-bold uppercase block">Rango Otorgado</span>
+                            <span class="text-xl font-bold font-fun text-emerald-300">Maestro de Ciencias 🕵️‍♂️</span>
+                        </div>
+                    </div>
+
+                    <button onclick="resetGame()" class="btn-detective bg-amber-400 hover:bg-amber-300 text-slate-950 font-fun font-bold text-xl px-10 py-3.5 rounded-2xl shadow-amber-800 uppercase">
+                        🔄 Jugar de Nuevo
+                    </button>
+                </div>
+            `;
+            showStageHTML(html);
+        }
+
+        // GAME OVER
+        function renderGameOver() {
+            const html = `
+                <div class="w-full max-w-md bg-slate-900 border-2 border-rose-500 rounded-3xl p-6 text-center flex flex-col items-center fade-enter">
+                    <span class="text-5xl mb-2">🔍</span>
+                    <h2 class="text-3xl font-bold font-fun text-rose-400 mb-2">¡Se agotaron las lupas!</h2>
+                    <p class="text-xs text-slate-300 mb-6">Los 3 detectives necesitan repasar los cuadernos de ciencias para resolver el caso.</p>
+                    <button onclick="resetGame()" class="btn-detective bg-rose-500 text-white font-fun font-bold text-lg px-8 py-3 rounded-2xl shadow-rose-900 uppercase">
+                        Reintentar Caso 🔄
+                    </button>
+                </div>
+            `;
+            showStageHTML(html);
+        }
+
+        function resetGame() {
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.dialogueIndex = 0;
+            updateHeaderUI();
+            renderMainImageScene();
+        }
+
+        // CONTROL DE DEMONA / NAV SHOWCASE
+        function previewScreen(screenType) {
+            audioSys.playFlashlight();
+            if (screenType === 'intro' || screenType === 'map') {
+                renderMainImageScene();
+            } else if (screenType === 'challenge') {
+                startChallenge(0);
+            } else if (screenType === 'lab') {
+                renderFlashlightExamScreen();
+            } else if (screenType === 'victory') {
+                renderVictoryScreen();
+            }
+        }
+
+        function handleNextAction() {
+            // Manejador del botón dinámico inferior
+        }
+
+        window.onload = () => {
+            updateHeaderUI();
+            renderMainImageScene();
+        };
+    </script>
+</body>
+</html>
