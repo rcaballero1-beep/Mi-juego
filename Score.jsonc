@@ -1,0 +1,46 @@
+"name": "Score",
+  "type": "object",
+  "properties": {
+    "player_name": {
+      "type": "string",
+      "description": "Nombre del comandante"
+    },
+    "points": {
+      "type": "number",
+      "description": "Puntaje total al terminar la aventura"
+    },
+    "planets": {
+      "type": "number",
+      "description": "Planetas conquistados"
+    },
+    "stars": {
+      "type": "number",
+      "description": "Estrellas acumuladas"
+    },
+    "tier": {
+      "type": "string",
+      "description": "Nivel de edad elegido"
+    },
+    "accessory": {
+      "type": "string",
+      "description": "Accesorios elegidos, separados por coma"
+    }
+  },
+  "required": [
+    "player_name",
+    "points"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
