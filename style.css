@@ -1,0 +1,208 @@
+:root {
+  --pink: #f472b6;
+  --fuchsia: #e879f9;
+  --amber: #fbbf24;
+  --ink: #ffffff;
+  --muted: rgba(255, 255, 255, 0.85);
+  --card: rgba(255, 255, 255, 0.1);
+  --line: rgba(255, 255, 255, 0.25);
+  --focus-ring: #5eead4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 15% 5%, rgba(124, 58, 237, 0.45), transparent 55%),
+    radial-gradient(circle at 85% 8%, rgba(236, 72, 153, 0.35), transparent 52%),
+    radial-gradient(circle at 50% 95%, rgba(14, 116, 144, 0.35), transparent 60%),
+    #07020f;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visibilidad de Lector de Pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Barra de Accesibilidad Superior */
+.accessibility-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.85);
+  border-bottom: 2px solid var(--pink);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.acc-group {
+  display: flex;
+  gap: 10px;
+}
+
+.acc-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--pink);
+  background: #1f0933;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.acc-btn:focus,
+.btn:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.acc-btn:hover {
+  background: var(--pink);
+  color: #000;
+}
+
+.read-btn.speaking {
+  background: #ef4444;
+  border-color: #fca5a5;
+  animation: pulse-red 1.5s infinite;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Visor de PDF y Transiciones */
+#app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pdf-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.pdf-canvas-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Transición de hojear página */
+.page-turn-animation {
+  animation: turnPage 0.4s ease-in-out;
+}
+
+@keyframes turnPage {
+  0% {
+    transform: rotateY(-15deg) scale(0.98);
+    opacity: 0.7;
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Navegación */
+.pdf-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.page-indicator {
+  font-family: 'Baloo 2', system-ui, sans-serif;
+  font-size: 1.3em;
+  font-weight: 800;
+  color: var(--amber);
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: none;
+  font-size: 1.1em;
+  font-weight: 800;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(120deg, #ec4899, #a855f7);
+  box-shadow: 0 6px 16px rgba(236, 72, 153, 0.4);
+  transition: transform 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+/* Declaratoria IAG */
+.iag-declaration {
+  margin-top: 40px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  font-size: 0.85em;
+  line-height: 1.5;
+  color: var(--muted);
+  text-align: center;
+}
+
+.iag-declaration strong {
+  color: var(--amber);
+}

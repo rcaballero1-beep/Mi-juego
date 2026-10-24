@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cosmitrón · Aventura Galáctica - Lector PDF</title>
+    <meta
+      name="description"
+      content="Juego y cuento educativo interactivo adaptado para baja visión y accesibilidad."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="estilos.css" />
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  </head>
+  <body>
+    <div class="stars" aria-hidden="true"></div>
+
+    <!-- Lector de pantalla (Zona de Anuncios ARIA) -->
+    <div id="screen-reader-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Barra de Herramientas de Accesibilidad Superior -->
+    <header class="accessibility-bar" role="toolbar" aria-label="Herramientas de accesibilidad">
+      <div class="acc-group">
+        <button id="btn-font-increase" class="acc-btn" aria-label="Agrandar letra">A+</button>
+        <button id="btn-font-decrease" class="acc-btn" aria-label="Achicar letra">A-</button>
+      </div>
+      <div class="acc-group">
+        <button id="btn-read-aloud" class="acc-btn read-btn" aria-label="Lectura en voz alta en español">
+          🔊 <span class="btn-text">Leer en voz alta</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="app">
+      <!-- Visor del PDF "juego.pdf" -->
+      <section id="pdf-viewer-container" class="pdf-container" aria-label="Visor del cuento interactivo">
+        <div class="pdf-canvas-wrapper" id="page-wrapper">
+          <canvas id="pdf-canvas"></canvas>
+          <div id="pdf-text-layer" class="text-layer"></div>
+        </div>
+      </section>
+
+      <!-- Botones de Navegación -->
+      <nav class="pdf-nav" aria-label="Navegación de páginas">
+        <button id="btn-prev" class="btn btn-primary" aria-label="Página anterior">
+          ◀ Anterior
+        </button>
+        <span id="page-num-display" class="page-indicator" aria-live="polite">Página 1 / 1</span>
+        <button id="btn-next" class="btn btn-primary" aria-label="Página siguiente">
+          Siguiente ▶
+        </button>
+      </nav>
+
+      <!-- Declaratoria de uso de Inteligencia Artificial Generativa (IAG) -->
+      <footer class="iag-declaration" role="contentinfo">
+        <p>
+          <strong>Declaratoria de Uso de IAG:</strong> Este recurso interactivo y sus adaptaciones de accesibilidad han sido desarrollados y optimizados con el soporte de herramientas de <em>Inteligencia Artificial Generativa (IAG)</em>, orientadas a promover la inclusión educativa y el aprendizaje accesible.
+        </p>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
