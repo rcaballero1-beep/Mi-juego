@@ -1,0 +1,105 @@
+export const PLANETS = [
+  {
+    id: 'chispa',
+    name: 'Planeta Chispa',
+    short: 'Chispa',
+    subject: 'Matemáticas',
+    emoji: '🔥',
+    color: '#FDBA74',
+    deep: '#C2410C',
+    tagline: 'Volcanes que escupen números',
+    intro:
+      '¡Uf, qué calor! Este planeta tiene volcanes que escupen cuentas. Si las resuelves, la puerta estelar se abre.',
+    rounds: 5,
+    seconds: 0,
+  },
+  {
+    id: 'palabra',
+    name: 'Planeta Palabra',
+    short: 'Palabra',
+    subject: 'Lengua',
+    emoji: '📚',
+    color: '#C4B5FD',
+    deep: '#5B21B6',
+    tagline: 'Un mundo hecho de letras que flotan',
+    intro:
+      'Aquí las letras flotan como burbujas. Ordena oraciones y descubre palabras para encender el motor.',
+    rounds: 5,
+    seconds: 0,
+  },
+  {
+    id: 'burbuja',
+    name: 'Planeta Burbuja',
+    short: 'Burbuja',
+    subject: 'Ciencias Naturales',
+    emoji: '🌱',
+    color: '#6EE7B7',
+    deep: '#047857',
+    tagline: 'Selvas, animales y agua que brilla',
+    intro:
+      '¡Mira tanta vida! Este planeta está lleno de animales y plantas. Demuestra lo que sabes de la naturaleza.',
+    rounds: 5,
+    seconds: 0,
+  },
+  {
+    id: 'acertijo',
+    name: 'Planeta Acertijo',
+    short: 'Acertijo',
+    subject: 'Acertijos y lógica',
+    emoji: '🧩',
+    color: '#F9A8D4',
+    deep: '#9D174D',
+    tagline: 'Un laberinto de adivinanzas',
+    intro:
+      'Las rocas de este planeta hablan en adivinanzas. Piensa con calma y ¡adivina la respuesta!',
+    rounds: 5,
+    seconds: 0,
+  },
+  {
+    id: 'ritmo',
+    name: 'Planeta Ritmo',
+    short: 'Ritmo',
+    subject: 'Matemáticas exprés',
+    emoji: '⚡',
+    color: '#7DD3FC',
+    deep: '#0369A1',
+    tagline: 'Cuentas a toda velocidad',
+    intro:
+      '¡Cuidado! Aquí el tiempo corre rapidísimo. Resuelve la mayor cantidad de cuentas antes de que se acabe el reloj.',
+    rounds: 8,
+    seconds: 45,
+  },
+  {
+    id: 'silueta',
+    name: 'Planeta Silueta',
+    short: 'Silueta',
+    subject: 'Formas y lógica',
+    emoji: '🔷',
+    color: '#FDE68A',
+    deep: '#B45309',
+    tagline: 'Figuras gigantes de cristal',
+    intro:
+      'Todo en este planeta tiene forma de figura geométrica. Une, cuenta y mide para seguir tu camino.',
+    rounds: 5,
+    seconds: 0,
+  },
+  {
+    id: 'tierra',
+    name: 'Planeta Tierra',
+    short: 'Tierra',
+    subject: 'Desafío final',
+    emoji: '🌍',
+    color: '#86EFAC',
+    deep: '#0F766E',
+    tagline: '¡Tu casa, al fin!',
+    intro:
+      '¡Lo lograste, casi! La Tierra está ahí abajo. Resuelve el último desafío contra el reloj para aterrizar.',
+    rounds: 8,
+    seconds: 120,
+    final: true,
+  },
+];
+
+export function getPlanet(id) {
+  return PLANETS.find((p) => p.id === id);
+}
